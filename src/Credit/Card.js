@@ -4,26 +4,35 @@ require("./Card.css");
 class Data extends React.Component {
   state = {
     num: "****************",
-    name: "Client",
-    date: "MM/AA",
+    name: "CLIENT",
+    expire: "MM/AA",
   };
 
-  Change1 = (e) => {
+  Change1 = (m) => {
+    let reg = /^(\d{4})\s(\d{4})\s(\d{4})\s(\d{4})$/g;
+    if (reg.test(m.target.value)) {
     this.setState({
-      num: e.target.value,
+      num: m.target.value,
     });
+  }
   };
 
-  Change2 = (e) => {
-    this.setState({
-      name: e.target.value,
-    });
+  Change2 = (n) => {
+    let reg = /^[a-z]*\s?[a-z]*$/gi;
+    if (reg.test(n.target.value)) {
+      this.setState({
+        name: n.target.value,
+      });
+    }
   };
 
   Change3 = (e) => {
-    this.setState({
-      date: e.target.value,
-    });
+    let reg = /^(((0)[0-9])|((1)[0-2]))(\/)(([2][0-5]))$/g;
+    if (reg.test(e.target.value)) {
+      this.setState({
+        expire: e.target.value,
+      });
+    } 
   };
 
   render() {
@@ -40,9 +49,7 @@ class Data extends React.Component {
                   name="nombre"
                   id="nombre"
                   placeholder="Numero du RIB"
-                  /*
-                pattern="[\d| ]{16,22}"*/
-                  size="10"
+                  size="20"
                   onChange={this.Change1}
                 />
               </p>
@@ -53,7 +60,7 @@ class Data extends React.Component {
                   name="name"
                   id="name"
                   placeholder="Nom du Client"
-                  size="10"
+                  size="12"
                   onChange={this.Change2}
                 />
               </p>
@@ -65,12 +72,13 @@ class Data extends React.Component {
                   name="nombre"
                   id="nombre"
                   placeholder="MM/AA"
-                  /*pattern="\d\d/\d\d" */
-
                   size="10"
                   onChange={this.Change3}
                 />
               </p>
+              <div className="form-actions">
+                <button className="btn btn-primary btn-block">Nouvelle Tentative</button>
+              </div>
             </form>
           </div>
         </div>
@@ -90,7 +98,7 @@ class Data extends React.Component {
 
             <div className="cardInfoExpiry">
               <div className="cardInfoLabel">EXPIRE LE</div>
-              <div className="date">{this.state.date}</div>
+              <div className="date">{this.state.expire}</div>
             </div>
           </div>
         </div>
