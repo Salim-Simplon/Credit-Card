@@ -3,36 +3,67 @@ require("./Card.css");
 
 class Data extends React.Component {
   state = {
-    num: "****************",
-    name: "CLIENT",
-    expire: "MM/AA",
+    star: "****************",
+    num: "",
+    name: "",
+    date: "",
   };
 
   Change1 = (m) => {
-    let reg = /^(\d{4})\s(\d{4})\s(\d{4})\s(\d{4})$/g;
-    if (reg.test(m.target.value)) {
-    this.setState({
-      num: m.target.value,
-    });
-  }
+    var val = m.target.value;
+    var reg = /^[0-9]+$/g;
+    let res;
+    let tab = val.split("");
+
+    for (let i = tab.length; i < 16; i++) {
+      tab.push("*");
+    }
+    console.log(tab);
+
+    if (reg.test(val)) {
+      this.setState({ star: tab.join(""), num: m.target.value });
+      if (val.length === 16) {
+        res = val.match(/\d{4}/g).join(" ");
+        console.log(res);
+        this.setState({ star: res, num: res });
+      }
+    } else {
+      res = "";
+    }
   };
 
   Change2 = (n) => {
+    let client = n.target.value;
     let reg = /^[a-z]*\s?[a-z]*$/gi;
-    if (reg.test(n.target.value)) {
+    if (reg.test(client)) {
       this.setState({
-        name: n.target.value,
+        name: client,
       });
     }
   };
 
   Change3 = (e) => {
-    let reg = /^(((0)[0-9])|((1)[0-2]))(\/)(([2][0-5]))$/g;
-    if (reg.test(e.target.value)) {
-      this.setState({
-        expire: e.target.value,
-      });
-    } 
+    let exp = e.target.value;
+    let Month = exp.slice(0, 2);
+    let Year = exp.slice(2, 4);
+
+    if (exp.length > 3) {
+      let reg1 = /^0[1-9]$/;
+      let reg2 = /^1[0-2]$/;
+      let reg = /^2[0-5]$/;
+      if (reg1.test(Month) || reg2.test(Month)) {
+        if (reg.test(Year)) {
+          exp = Month + "/" + Year;
+        } else {
+          alert("Enter a correct date");
+          exp = "";
+        }
+      } else {
+        alert("Enter a correct date");
+        exp = "";
+      }
+    }
+    this.setState({ date: exp });
   };
 
   render() {
@@ -46,10 +77,9 @@ class Data extends React.Component {
                 Saisir le RIB :
                 <input
                   type="text"
-                  name="nombre"
                   id="nombre"
                   placeholder="Numero du RIB"
-                  size="20"
+                  value={this.state.num}
                   onChange={this.Change1}
                 />
               </p>
@@ -57,10 +87,9 @@ class Data extends React.Component {
                 Saisir le Nom et Prenom :
                 <input
                   type="text"
-                  name="name"
                   id="name"
                   placeholder="Nom du Client"
-                  size="12"
+                  value={this.state.name}
                   onChange={this.Change2}
                 />
               </p>
@@ -69,15 +98,16 @@ class Data extends React.Component {
                 Saisir la Date d'expiration :
                 <input
                   type="text"
-                  name="nombre"
                   id="nombre"
                   placeholder="MM/AA"
-                  size="10"
+                  value={this.state.date}
                   onChange={this.Change3}
                 />
               </p>
               <div className="form-actions">
-                <button className="btn btn-primary btn-block">Nouvelle Tentative</button>
+                <button className="btn btn-primary btn-block">
+                  Nouvelle Tentative
+                </button>
               </div>
             </form>
           </div>
@@ -88,7 +118,7 @@ class Data extends React.Component {
             <img src="/image/Salim.jpeg" alt="" />
           </div>
 
-          <div className="cardNumber">{this.state.num}</div>
+          <div className="cardNumber">{this.state.star}</div>
 
           <div className="cardInfo">
             <div className="cardInfoName">
@@ -98,7 +128,7 @@ class Data extends React.Component {
 
             <div className="cardInfoExpiry">
               <div className="cardInfoLabel">EXPIRE LE</div>
-              <div className="date">{this.state.expire}</div>
+              <div className="date">{this.state.date}</div>
             </div>
           </div>
         </div>
